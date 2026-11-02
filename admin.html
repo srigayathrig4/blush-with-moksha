@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Owner page | Blush with Moksha</title>
+<meta name="theme-color" content="#1f1411">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --choc:#1f1411; --espresso:#2d1b15; --cocoa:#43291f;
+  --copper:#b9794f; --rose:#e0ad8c; --cream:#f7ede4; --muted:#cdb9aa;
+  --ok:#8fd19e; --warn:#ffcf8a; --bad:#ffb4a8;
+  --display:'Bodoni Moda', 'Didot', Georgia, serif;
+  --body:'Jost', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--choc);color:var(--cream);font-family:var(--body);font-weight:300;font-size:1.0625rem;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--rose);outline-offset:3px}
+.wrap{width:min(860px,100% - 32px);margin-inline:auto}
+header{border-bottom:1px solid rgba(185,121,79,.3);background:rgba(31,20,17,.95);position:sticky;top:0;z-index:5}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:68px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-size:1.1rem;text-decoration:none}
+.brand img{width:40px;height:40px}
+#who{display:flex;align-items:center;gap:10px;font-size:.92rem;color:var(--muted);min-width:0}
+#who span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:34vw}
+main{padding:28px 0 80px}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(1.7rem,5vw,2.3rem);line-height:1.15;margin-bottom:6px}
+h2{font-family:var(--display);font-weight:400;font-size:1.5rem;margin-bottom:8px}
+.muted{color:var(--muted)}
+.card{padding:clamp(18px,3vw,26px);border-radius:22px;background:var(--espresso);border:1px solid rgba(185,121,79,.35)}
+.center{text-align:center;margin-top:24px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:9px 20px;border-radius:999px;border:1px solid transparent;font-weight:500;font-size:.95rem;cursor:pointer;text-decoration:none;transition:transform .2s,background .2s}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:scale(.97)}
+.btn-light{background:#fff;color:var(--choc)}
+.btn-line{border-color:var(--copper);background:transparent;color:var(--cream)}
+.btn-line:hover{background:rgba(185,121,79,.2)}
+.btn-small{min-height:38px;padding:6px 16px;font-size:.9rem}
+.btn-danger{border-color:rgba(255,180,168,.5);color:var(--bad)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}
+.chip{min-height:40px;padding:6px 16px;border-radius:999px;border:1px solid rgba(224,173,140,.4);background:transparent;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--rose);color:var(--choc);border-color:var(--rose)}
+.chip b{font-weight:600;margin-left:6px}
+.list{display:grid;gap:14px}
+.booking{padding:18px 20px;border-radius:20px;background:var(--espresso);border:1px solid rgba(185,121,79,.3);display:grid;gap:10px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.top h3{font-family:var(--display);font-weight:400;font-size:1.35rem;line-height:1.2;overflow-wrap:anywhere}
+.sub{font-size:.88rem;color:var(--muted)}
+.badge{flex:none;padding:3px 12px;border-radius:999px;font-size:.85rem;font-weight:500;border:1px solid currentColor}
+.s-new{color:var(--warn)} .s-confirmed{color:var(--ok)} .s-done{color:var(--muted)} .s-cancelled{color:var(--bad)}
+dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px}
+dt{color:var(--muted)}
+dd{overflow-wrap:anywhere}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.btn,.brand span{white-space:nowrap}
+@media(max-width:520px){#who span{display:none}}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);max-width:min(92vw,460px);padding:12px 18px;border-radius:14px;background:#fff;color:var(--choc);font-weight:500;opacity:0;pointer-events:none;transition:opacity .25s}
+#toast.show{opacity:1}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="index.html"><img src="images/logo-mark.svg" alt="" width="40" height="40"><span>Blush with Moksha</span></a>
+    <div id="who"></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1>Bookings</h1>
+  <p class="muted">Private page for the studio owner.</p>
+  <div id="view" aria-live="polite"></div>
+</main>
+
+<div id="toast" role="status"></div>
+
+<script type="module">
+import * as store from './db.js';
+
+const view = document.getElementById('view');
+const who = document.getElementById('who');
+const toastEl = document.getElementById('toast');
+let unsub = null;
+let token = 0;
+let all = [];
+let filter = 'new';
+let toastTimer = null;
+
+const LABEL = { new: 'New', confirmed: 'Confirmed', done: 'Done', cancelled: 'Cancelled' };
+const ORDER = ['new', 'confirmed', 'done', 'cancelled'];
+
+// Builds elements safely. Customer text is always added as text, never as HTML.
+function h(tag, props, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(props || {})) {
+    if (v === false || v == null) continue;
+    if (k === 'class') e.className = v;
+    else if (k.startsWith('on')) e.addEventListener(k.slice(2), v);
+    else e.setAttribute(k, v);
+  }
+  for (const kid of kids.flat()) {
+    if (kid == null || kid === false) continue;
+    e.append(kid);
+  }
+  return e;
+}
+
+function toast(msg) {
+  toastEl.textContent = msg;
+  toastEl.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toastEl.classList.remove('show'), 3200);
+}
+
+function show(...nodes) { view.replaceChildren(...nodes); }
+
+function notice(title, text, ...extra) {
+  show(h('div', { class: 'card center' }, h('h2', {}, title), text ? h('p', { class: 'muted' }, text) : null, ...extra));
+}
+
+function dateLabel(s) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || '');
+  if (!m) return s || '';
+  return new Date(+m[1], +m[2] - 1, +m[3]).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function receivedLabel(d) {
+  if (!d) return 'just now';
+  return d.toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' });
+}
+
+function phoneDigits(p) {
+  let d = String(p || '').replace(/\D/g, '');
+  if (d.length === 11 && d.startsWith('0')) d = d.slice(1);
+  if (d.length === 10) d = '91' + d;
+  return d;
+}
+
+function replyLink(b) {
+  const when = dateLabel(b.date) + (b.timeOfDay ? ' (' + b.timeOfDay.toLowerCase() + ')' : '');
+  const text = b.status === 'confirmed'
+    ? `Hello ${b.name}, your ${b.service} booking with Blush with Moksha Makeup Studio on ${when} is confirmed. See you then!`
+    : `Hello ${b.name}, this is Blush with Moksha Makeup Studio about your ${b.service} booking on ${when}.`;
+  return 'https://wa.me/' + phoneDigits(b.phone) + '?text=' + encodeURIComponent(text);
+}
+
+async function act(id, status) {
+  try { await store.setStatus(id, status); toast('Marked as ' + LABEL[status].toLowerCase()); }
+  catch (e) { toast('Could not update. Check your connection and try again.'); }
+}
+
+async function remove(b) {
+  if (!confirm('Delete the booking from ' + b.name + '? This cannot be undone.')) return;
+  try { await store.removeBooking(b.id); toast('Booking deleted'); }
+  catch (e) { toast('Could not delete. Check your connection and try again.'); }
+}
+
+function buttonsFor(b) {
+  const out = [];
+  if (b.status === 'new') {
+    out.push(h('button', { class: 'btn btn-light btn-small', type: 'button', onclick: () => act(b.id, 'confirmed') }, 'Confirm'));
+    out.push(h('button', { class: 'btn btn-line btn-small', type: 'button', onclick: () => act(b.id, 'cancelled') }, 'Cancel booking'));
+  } else if (b.status === 'confirmed') {
+    out.push(h('button', { class: 'btn btn-light btn-small', type: 'button', onclick: () => act(b.id, 'done') }, 'Mark done'));
+    out.push(h('button', { class: 'btn btn-line btn-small', type: 'button', onclick: () => act(b.id, 'cancelled') }, 'Cancel booking'));
+  } else {
+    out.push(h('button', { class: 'btn btn-line btn-small', type: 'button', onclick: () => act(b.id, 'new') }, 'Move back to new'));
+  }
+  out.push(h('a', { class: 'btn btn-line btn-small', href: replyLink(b), target: '_blank', rel: 'noopener' }, 'Reply on WhatsApp'));
+  out.push(h('a', { class: 'btn btn-line btn-small', href: 'tel:+' + phoneDigits(b.phone) }, 'Call'));
+  out.push(h('button', { class: 'btn btn-line btn-danger btn-small', type: 'button', onclick: () => remove(b) }, 'Delete'));
+  return out;
+}
+
+function card(b) {
+  const people = b.people === 1 ? '1 person' : (b.people || 1) + ' people';
+  const where = b.mode === 'travel'
+    ? 'Travel to client: ' + [b.address, b.city].filter(Boolean).join(', ')
+    : 'At the studio';
+  return h('article', { class: 'booking' },
+    h('div', { class: 'top' },
+      h('div', {}, h('h3', {}, b.name), h('div', { class: 'sub' }, 'Received ' + receivedLabel(b.createdAt))),
+      h('span', { class: 'badge s-' + b.status }, LABEL[b.status] || b.status)),
+    h('dl', {},
+      h('dt', {}, 'Service'), h('dd', {}, b.service),
+      h('dt', {}, 'When'), h('dd', {}, dateLabel(b.date) + ', ' + (b.timeOfDay || '') + ' · ' + people),
+      h('dt', {}, 'Where'), h('dd', {}, where),
+      h('dt', {}, 'Phone'), h('dd', {}, b.phone),
+      b.notes ? h('dt', {}, 'Notes') : null, b.notes ? h('dd', {}, b.notes) : null),
+    h('div', { class: 'actions' }, ...buttonsFor(b)));
+}
+
+function renderList() {
+  const counts = Object.fromEntries(ORDER.map((s) => [s, all.filter((b) => b.status === s).length]));
+  const chips = h('div', { class: 'chips', role: 'group', 'aria-label': 'Filter bookings' },
+    ...ORDER.map((s) => h('button', { class: 'chip', type: 'button', 'aria-pressed': String(filter === s), onclick: () => { filter = s; renderList(); } }, LABEL[s], h('b', {}, counts[s]))),
+    h('button', { class: 'chip', type: 'button', 'aria-pressed': String(filter === 'all'), onclick: () => { filter = 'all'; renderList(); } }, 'All', h('b', {}, all.length)));
+  const rows = all.filter((b) => filter === 'all' || b.status === filter);
+  const body = rows.length
+    ? h('div', { class: 'list' }, ...rows.map(card))
+    : h('div', { class: 'card center' }, h('p', { class: 'muted' }, filter === 'new' ? 'No new bookings right now. New requests show up here by themselves.' : 'Nothing here yet.'));
+  show(chips, body);
+}
+
+function renderBar(user) {
+  if (!user) { who.replaceChildren(); return; }
+  who.replaceChildren(
+    h('span', {}, user.email || ''),
+    h('button', { class: 'btn btn-line btn-small', type: 'button', onclick: () => store.signOutOwner() }, 'Sign out'));
+}
+
+function signedOut() {
+  const msg = h('p', { class: 'muted', style: 'margin-top:10px' });
+  const btn = h('button', { class: 'btn btn-light', type: 'button', style: 'margin-top:16px', onclick: async () => {
+    msg.textContent = '';
+    try { await store.signInOwner(); }
+    catch (e) {
+      msg.textContent = e && e.code === 'auth/unauthorized-domain'
+        ? 'This website address is not allowed to sign in yet. In Firebase, open Authentication, Settings, Authorized domains, and add it.'
+        : e && e.code === 'auth/popup-closed-by-user'
+          ? 'The sign-in window was closed. Please try again.'
+          : 'Sign-in did not finish. Please try again.';
+    }
+  } }, 'Sign in with Google');
+  notice('Owner sign in', 'Only the studio owner can see bookings.', btn, msg);
+}
+
+function onUser(user) {
+  const mine = ++token;
+  if (unsub) { unsub(); unsub = null; }
+  all = [];
+  renderBar(user);
+  if (!user) { signedOut(); return; }
+  if ((user.email || '').toLowerCase() !== store.OWNER_EMAIL.toLowerCase()) {
+    notice('This account is not the studio owner', 'You are signed in as ' + user.email + '. Sign out, then sign in with ' + store.OWNER_EMAIL + '.');
+    return;
+  }
+  notice('Loading bookings…', '');
+  store.watchBookings(
+    (list) => { if (mine === token) { all = list; renderList(); } },
+    () => { if (mine === token) notice('Bookings cannot be shown', 'Firebase refused the request. Check that the security rules from firestore.rules are published and that you signed in with ' + store.OWNER_EMAIL + '.'); }
+  ).then((u) => { if (mine === token) unsub = u; else u(); })
+   .catch(() => { if (mine === token) notice('Could not load bookings', 'Check your internet connection and refresh the page.'); });
+}
+
+async function start() {
+  if (!store.isConfigured) {
+    notice('The database is not connected yet',
+      'Follow steps 1 to 4 in SETUP.md, paste your Firebase settings into firebase-config.js, and upload the site again.');
+    return;
+  }
+  notice('Loading…', '');
+  try { await store.onUser(onUser); }
+  catch (e) { notice('Could not load sign-in', 'Check your internet connection and refresh the page.'); }
+}
+start();
+</script>
+</body>
+</html>
